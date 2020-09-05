@@ -1,12 +1,9 @@
+import 'package:flash_chat/constants/routes.dart';
+import 'package:flash_chat/widgets/rounded_button.dart';
 import 'package:flutter/material.dart';
-import 'login_screen.dart';
-import 'registration_screen.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:flash_chat/components/rounded_button.dart';
 
 class WelcomeScreen extends StatefulWidget {
-  static const String id = 'welcome_screen';
-
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
@@ -15,25 +12,28 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     with SingleTickerProviderStateMixin {
   AnimationController controller;
   Animation animation;
-
   @override
   void initState() {
     super.initState();
-
-    controller =
-        AnimationController(duration: Duration(seconds: 1), vsync: this);
+    controller = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 1),
+    );
+    // animation = CurvedAnimation(parent: controller, curve: Curves.easeInOut);
     animation = ColorTween(begin: Colors.blueGrey, end: Colors.white)
         .animate(controller);
     controller.forward();
+    //makes a loop of animation
+    // animation.addStatusListener((status) {
+    //   if (status == AnimationStatus.completed) {
+    //     controller.reverse(from: 1.0);
+    //   } else if (status == AnimationStatus.dismissed) {
+    //     controller.forward();
+    //   }
+    // });
     controller.addListener(() {
       setState(() {});
     });
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
   }
 
   @override
@@ -52,14 +52,16 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   tag: 'logo',
                   child: Container(
                     child: Image.asset('images/logo.png'),
-                    height: 60.0,
+                    height: 60,
                   ),
                 ),
                 TypewriterAnimatedTextKit(
+                  speed: Duration(milliseconds: 500),
                   text: ['Flash Chat'],
                   textStyle: TextStyle(
                     fontSize: 45.0,
                     fontWeight: FontWeight.w900,
+                    color: Colors.grey[600],
                   ),
                 ),
               ],
@@ -68,22 +70,29 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               height: 48.0,
             ),
             RoundedButton(
-              title: 'Log In',
-              colour: Colors.lightBlueAccent,
+              color: Colors.lightBlueAccent,
+              text: "Log In",
               onPressed: () {
-                Navigator.pushNamed(context, LoginScreen.id);
+                Navigator.pushNamed(context, Routes.loginScreen);
               },
             ),
             RoundedButton(
-              title: 'Register',
-              colour: Colors.blueAccent,
+              color: Colors.blueAccent,
+              text: "Register",
               onPressed: () {
-                Navigator.pushNamed(context, RegistrationScreen.id);
-              },
+                    Navigator.pushNamed(context, Routes.registrationScreen);
+                    //Go to registration screen.
+                  },
             ),
           ],
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 }
